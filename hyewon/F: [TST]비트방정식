@@ -1,0 +1,73 @@
+#include<stdio.h>
+  
+int x_bit[64] = { 0, };
+int y_bit[64] = { 0,0 };
+int k_bit[64] = { 0, };
+int x, y, k;
+void make_bit(int a[64], long long int n) {
+    for (int i = 0; i < 64; i++) {
+        if ((1 << i & n) >> i == 1) {
+            a[63 - i] = 1;
+        }
+        else {
+            a[63 - i] = 0;
+        }
+    }
+}
+  
+void print_bit(int a[64]) {
+    for (int i = 0; i < 64; i++) {
+        printf("%d", a[i]);
+    }
+}
+void print_bit_64(int a[64]) {
+    for (int i = 0; i < 64; i++) {
+        printf("%d", a[i]);
+    }
+} 
+int bit_to_int(int a[32]) {
+    int x = 0;
+    for (int i = 0; i < 32; i++) {
+        x += (1 << i) *a[31 - i];
+    }
+    return x;
+}
+  
+unsigned long long   bit_to_int_64(int a[64]) {
+   unsigned  long  long   x = 0;
+   unsigned  long  long   y = 1;
+ 
+   for (int i = 0; i < 64; i++,y=y*2) {
+        x += y *a[63 - i];
+        //  printf("(%d)\n", (1 << i) * a[31-i]);
+    }
+    return x;
+}
+int main() {
+    scanf("%d %d", &x, &k);
+    int bit_idx = 0;
+  
+    make_bit(x_bit, (long long int) x);
+    //printf(">>> %d",bit_to_int(x_bit));
+  
+    // x가 1인 자리는 y는 0이여야하고
+    // y가 0인 자리는 y가 0 또는 1이 될 수 있다.
+    //1번째 :00
+    //2번째 :01 3번째 10 4번째 11 5번째 100 
+    //int k_bit = k - 1; // 100 
+    make_bit(k_bit, (long long int) k);
+  
+  
+     int k_idx = 63; int i;
+    for (i = 63; i >= 0; i--) {
+        if (x_bit[i] == 1) y_bit[i] = 0;
+        else {
+            y_bit[i] = k_bit[k_idx--];
+        }
+    }
+  
+    long long unsigned int res = bit_to_int_64(y_bit);
+    printf("%llu", res);
+  
+    return 0;
+}
