@@ -1,0 +1,50 @@
+#include<stdio.h>
+
+int map[129][129];
+int n;
+int total_white;
+int total_blue;
+
+int solv(int y, int x, int n) {
+	/* (y  ,x)  ---- (y,x+n)
+	   (y+n,x) ------(y+x,x+n)
+	*/
+	int color = map[y][x];
+	int i, j;
+	int check = 0;
+
+	for (i = y; i < y + n; i++) {
+		for ( j = x; j < x + n; j++)
+		{
+			if (map[i][j] != color) {
+				check = 1;
+				break;
+			}
+		}
+		if (check) break;
+	}
+	if (check==0) {
+		if (color == 1)total_blue++;
+		else total_white++;
+		return 1;
+	}
+	else {
+		solv(y, x, n / 2);
+		solv(y + n / 2, x, n / 2);
+		solv(y, x + n / 2, n / 2);
+		solv(y + n / 2, x + n / 2, n / 2);
+	}
+	
+
+
+}
+int main() {
+	scanf("%d", &n);
+	for (int i = 0; i < n; i++) {
+		for (int j = 0; j < n; j++)
+			scanf("%d", &map[i][j]);
+	}
+
+	solv(0, 0, n);
+	printf("%d\n%d", total_white, total_blue);
+}
