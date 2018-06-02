@@ -1,8 +1,10 @@
+// code not working
+
 #include <stdio.h>
 
 #define MAX 1500
 #define CIRCULAR 200*200
-int R, C;	//¼¼·Î,°¡·Î
+int R, C;	//ì„¸ë¡œ,ê°€ë¡œ
 char tmp_map[MAX][MAX];
 char map[MAX][MAX];
 char chk[MAX][MAX];
@@ -108,7 +110,7 @@ int solve()
 
 	for(;;)
 	{
-		// ±æÀÌ ¾øÀ¸¸é 1ºĞ µÚ ±î¸¶±Í¿Í ±îÄ¡ÀÇ ±æÀ» È®ÀÎ
+		// ê¸¸ì´ ì—†ìœ¼ë©´ 1ë¶„ ë’¤ ê¹Œë§ˆê·€ì™€ ê¹Œì¹˜ì˜ ê¸¸ì„ í™•ì¸
 		if (wp == rp)
 		{
 			sol += birdBridge();
@@ -116,7 +118,7 @@ int solve()
 			if (rp < 0) rp = CIRCULAR - 1;
 		}
 
-		// ÀÏ¹İÀûÀÎ BFS·Î °ß¿ì³ª Á÷³à°¡ ¸¸³ª´Â Áö È®ÀÎ
+		// ì¼ë°˜ì ì¸ BFSë¡œ ê²¬ìš°ë‚˜ ì§ë…€ê°€ ë§Œë‚˜ëŠ” ì§€ í™•ì¸
 		tdata = que[rp++];
 		rp %= CIRCULAR;
 
