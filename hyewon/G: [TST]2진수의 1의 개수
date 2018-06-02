@@ -1,0 +1,81 @@
+#include<stdio.h>
+/*
+int solv(int n) {
+int cnt = 0;
+while (n > 0) {
+if (n & 0x1 == 1) {
+cnt++;
+}
+
+n = n >> 1;
+
+// 5= 101
+}
+return cnt;
+}
+
+int solv2(int n) {
+int cnt = 0;
+while (n > 0) {
+cnt += n & 1;
+
+n = n >> 1;
+
+// 5= 101
+}
+
+return cnt;
+
+}
+
+//
+//int solv3_check(int n) {
+//	int cnt = 0;
+//	printf("------------%d:\n", n);
+//	while (n > 0) {
+//		printf("\nn:%d", n);
+//		printf("n & n-1 : %d", n& (n - 1));
+//		n = n& (n - 1);
+//		cnt++;
+//
+//	}
+//	printf("cnt : %d", cnt);
+//	return cnt;
+//
+//}
+*/
+int solv3(int n) {
+	int cnt = 0;
+	while (n > 0) {
+		n = n&(n - 1);
+		cnt++;
+	}
+	return cnt;
+
+}
+
+int solv4(int n) {
+	//divide and conquere방식
+	// int 4바이트  -> 0xFFFF FFFF까지
+	// 0x55555555 = 0101 0101 0101 0101 0101 0101 0101 0101 (1)
+	// 0x33333333 = 0011 0011 0011 0011 0011 0011 0011 0011 (2)
+	// 0x0f0f0f0f = 0000 1111 0000 1111 0000 1111 0000 1111 (4)
+	// 0x00ff00ff = 0000 0000 1111 1111 0000 0000 1111 1111 (8)
+	// 0x0000ffff = 0000 0000 0000 0000 1111 1111 1111 1111 (16)s
+	n = (n & 0x55555555) + ((n >> 1) & 0x55555555);
+	n = (n & 0x33333333) + ((n >> 2) & 0x33333333);
+	n = (n & 0x0f0f0f0f) + ((n >> 4) & 0x0f0f0f0f);
+	n = (n & 0x00ff00ff) + ((n >> 8) & 0x00ff00ff);
+	n = (n & 0x0000ffff) + ((n >> 16) & 0x0000ffff);
+	return n;
+}
+
+int main() {
+	int n;
+	scanf("%d", &n);
+	int res = 0;
+	for (int i = 1; i <= n; i++) res += solv4(i);
+	printf("%d", res);
+
+	return 0;
+}
