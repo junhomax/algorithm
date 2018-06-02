@@ -12,7 +12,7 @@ int main(void)
 
 	for (i = 1; i <= n; i++){
 		for (j = 1; j <= n; j++)
-			scanf(" %d", &paper[i][j]); //0=Èò»ö 1=ÆÄ¶õ»ö
+			scanf(" %d", &paper[i][j]); //0=í°ìƒ‰ 1=íŒŒëž€ìƒ‰
 	}
 
 	divideAndConquer(1, n, 1, n);
@@ -28,7 +28,7 @@ int divideAndConquer(int xStart, int xEnd, int yStart, int yEnd)
 
 	for (i = yStart; i <= yEnd; i++){
 		for (j = xStart; j <= xEnd; j++){
-			if (paper[i][j] != paper[yStart][xStart]){ // ÇÑ ±¸°£ ³»ÀÇ »öÁ¾ÀÌ »öÀÌ °¡Àå ¿ÞÂÊÀ§ ±âÁØÀ¸·Î ¸ðµÎ °°ÀºÁö ÆÇº° 
+			if (paper[i][j] != paper[yStart][xStart]){ // í•œ êµ¬ê°„ ë‚´ì˜ ìƒ‰ì¢…ì´ ìƒ‰ì´ ê°€ìž¥ ì™¼ìª½ìœ„ ê¸°ì¤€ìœ¼ë¡œ ëª¨ë‘ ê°™ì€ì§€ íŒë³„ 
 				a = 1; break;
 			}
 		}
@@ -38,7 +38,7 @@ int divideAndConquer(int xStart, int xEnd, int yStart, int yEnd)
 
 	if (a == 0)
 	{
-		if (paper[yStart][xStart] == 0) // ÇÑ ±¸°£³»¿¡ »öÀÌ ¸ðµÎ °°´Ù°í ÆÇº° ³µÀ¸¸é ¹«½¼»öÀÎÁö È®ÀÎÇØ¼­ »öÁ¾ÀÌ °³¼ö¸¦ ¿Ã¸°´Ù
+		if (paper[yStart][xStart] == 0) // í•œ êµ¬ê°„ë‚´ì— ìƒ‰ì´ ëª¨ë‘ ê°™ë‹¤ê³  íŒë³„ ë‚¬ìœ¼ë©´ ë¬´ìŠ¨ìƒ‰ì¸ì§€ í™•ì¸í•´ì„œ ìƒ‰ì¢…ì´ ê°œìˆ˜ë¥¼ ì˜¬ë¦°ë‹¤
 			white++;
 		else
 			blue++;
@@ -48,7 +48,7 @@ int divideAndConquer(int xStart, int xEnd, int yStart, int yEnd)
 	else
 	{
 		int xMid = (xStart + xEnd) / 2, yMid = (yStart + yEnd) / 2;
-		//»öÁ¾ÀÌ¸¦ 4µîºÐÇÏ¿© Àç±ÍÀûÀ¸·Î °³¼ö¸¦ »÷´Ù
+		//ìƒ‰ì¢…ì´ë¥¼ 4ë“±ë¶„í•˜ì—¬ ìž¬ê·€ì ìœ¼ë¡œ ê°œìˆ˜ë¥¼ ìƒŒë‹¤
 		divideAndConquer(xStart, xMid, yStart, yMid);
 		divideAndConquer(xMid + 1, xEnd, yStart, yMid);
 		divideAndConquer(xStart, xMid, yMid + 1, yEnd);
