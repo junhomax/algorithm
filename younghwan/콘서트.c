@@ -10,8 +10,18 @@ typedef struct st
 INFO stack[MAX];
 int sp;
 #define EMPTY 0
-int count;
+unsigned long long count;
 int maxh;
+
+int factorial(int num)
+{
+	int ret = 0;
+	for (int i = 1; i <= num; i++)
+	{
+		ret += i;
+	}
+	return ret;
+}
 
 int main()
 {
@@ -24,22 +34,49 @@ int main()
 
 		if (sp == EMPTY)
 		{
-			stack[sp++] = input;
+			stack[++sp] = input;
 		}
 		else
 		{
-			int tmph = stack[sp].height;
-			for (;;)
+			if (stack[sp].height < input.height)
 			{
-				if (sp == EMPTY || stack[sp].height >= input.height) break;
-				tmph = tmph > stack[sp].height ? tmph : stack[sp].height;
-				sp--;
-				if (stack[sp].height >= tmph) count++;
+				while (sp != EMPTY && stack[sp].height < input.height)
+				{
+					count++;
+					sp--;
+				}
+
+				stack[++sp] = input;
 			}
-			stack[++sp] = input;
-			count++;
+			else if (stack[sp].height == input.height)
+			{
+				int ptr = sp;
+				int cnt = 0;
+				while (sp != EMPTY && stack[ptr].height == input.height)
+				{
+					cnt++;
+					ptr--;
+				}
+
+				count += cnt;
+				if (ptr != EMPTY) count++;
+
+				stack[++sp] = input;
+			}
+			else if (stack[sp].height > input.height)
+			{
+				count++;
+				stack[++sp] = input;
+			}
 		}
 	}
+
+	while (sp != EMPTY)
+	{
+		if (stack[sp].height < stack[sp - 1].height) count++;
+		sp--;
+	}
+
 	
 	printf("%d\n", count);
 
