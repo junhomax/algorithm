@@ -1,0 +1,79 @@
+#include<stdio.h>
+int n;
+typedef struct __food {
+	int f;
+	long long s;
+}food;
+
+int N;
+long long M;
+long long res;
+food fs[100000];
+long long treeMax[300000];
+void initMaxS(int node, int s, int e, int idx, long long data) {
+	int m;
+	if (s == e) {
+		treeMax[node] = data;
+		return;
+	}
+	m = (s + e) / 2;
+	if (idx <= m) initMaxS(node * 2, s, m, idx, data);
+	else initMaxS(node * 2 + 1, m + 1, e, idx, data);
+	treeMax[node] = treeMax[node * 2] > treeMax[node * 2 + 1] ? treeMax[node * 2] : treeMax[node * 2 + 1];
+}
+long long queryMax(int node, int s, int e, int qs, int qe) {
+	if (e < qs || qe < s) return 0;
+	if (qs <= s && e <= qe) return treeMax[node];
+	int m = (s + e) / 2;
+	long long left = queryMax(node * 2, s, m, qs, qe);
+	long long right = queryMax(node * 2 + 1, m + 1, e, qs, qe);
+	return left > right ? left : right;
+}
+
+int main() {
+	scanf("%d %lld", &N, &M);
+	for (int i = 1; i <= N; i++) {
+
+		scanf("%d %lld", &(fs[i].f), &(fs[i].s));
+		initMaxS(1, 1, N, i, fs[i].s);
+
+	}
+	/////start 부터 end까지 먹는다
+	int start;
+	int end;
+	int k;
+	int tmp;
+
+	long long sum_f = 0;
+	long long sum_s = 0;
+	//최초
+	sum_f = fs[1].f;
+	sum_s = fs[1].s;
+	for (k = 2; k <= N; k++) {
+		sum_f += fs[k].f;
+
+		if (sum_f >= M) {
+			res = queryMax(1, 1, N, 1, k);
+			break;
+		}
+	}
+	start = 0;
+	end = k;
+	///
+	for (start = start; start <= N; start++) {
+		//start를 제외하고 en다음의 몇개를 추가하려고함
+		sum_f -= fs[start].f;
+
+		for (tmp = end + 1; tmp <= N; tmp++) {
+			sum_f += fs[tmp].f;
+			if (sum_f >= M) {
+				sum_s = queryMax(1, 1, N, start + 1, tmp);
+				if (res > sum_s) res = sum_s;
+				end = tmp;
+				break;
+			}
+		}
+	}
+
+	printf("%lld\n", res);
+}
