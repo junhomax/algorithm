@@ -1,0 +1,36 @@
+#include <stdio.h>
+
+struct st {
+	int v1;
+	int v2;
+};
+
+
+typedef struct st st;
+
+int N, t = 0;
+st s[500001];
+int main() {
+	int M;
+	long long count = 0;
+	scanf("%d", &N);
+
+	for (int i = N; i > 0; i--)
+	{
+		scanf("%d", &M);
+		st temp;
+		temp.v1 = M;
+		temp.v2 = 1;
+		while (t>0 && s[t].v1 <= M) {
+			count += (long long)s[t].v2;
+			if (s[t].v1 == M) temp.v2 += s[t].v2;
+			t--;
+		}
+		if (t != 0) count++;
+		s[++t] = temp;
+
+	}
+	
+	printf("%lld\n", count);
+	return 0;
+}
