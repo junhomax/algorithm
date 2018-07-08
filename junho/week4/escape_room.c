@@ -1,4 +1,3 @@
-#if 1
 #include <stdio.h>
 
 #define MAX_NUM 101
@@ -13,30 +12,42 @@ int N;
 int target[MAX_NUM], answer[MAX_NUM];
 int memoize[CIRCULAR_NUM][CIRCULAR_NUM][CIRCULAR_NUM][MAX_NUM + 3];
 
-int solve( int first, int second, int third, int num );
-int calcSpin( int expectedNum );
-
-int main( void ) {
-    register int i;
-    scanf( "%d", &N );
-    for ( i = 1; i <= N; i++ ) scanf( "%d", &target[i] );
-    for ( i = 1; i <= N; i++ ) scanf( "%d", &answer[i] );
-    
-    printf( "%d\n", solve( 0, 0, 0, 1 ) );
-    
-    return 0;
+/*
+ This function initiates the array for memoization.
+ input       : void
+ output      : void
+ complexity  : O(N)
+ */
+void init( void ) {
+    register int i, j, k, l;
+    for ( i = 0; i < CIRCULAR_NUM; i++ )
+        for ( j = 0; j < CIRCULAR_NUM; j++ )
+            for ( k = 0; k < CIRCULAR_NUM; k++ )
+                for ( l = 0; l < MAX_NUM + 3; l++ )
+                    memoize[i][j][k][l] = INIT_NUM;
 }
 
+/*
+ This function calculates the lowest cost for spin target lock to adjust answer lock.
+ input       : int ( expected number to spin )
+ output      : int ( the lowest cost to spin )
+ complexity  : O(1)
+ */
+int calcSpin( int expectedNum ) {
+    return expectedNum < 0 ?
+    ( CIRCULAR_NUM - ( ( -expectedNum ) % CIRCULAR_NUM ) ) % CIRCULAR_NUM
+    : expectedNum % CIRCULAR_NUM;
+}
 
 /*
-    This function calculates the lowest cost for spin all target number
-    to answer number by simulating spin of number.
-    input       : int firstNumber, int secondNumber, int thirdNumber, int slidingNumber
-    output      : int ( the lowest cost to spin all target lock elements )
-    complexity  : O(N); O(3 * 6 * N)
-*/
+ This function calculates the lowest cost for spin all target number
+ to answer number by simulating spin of number.
+ input       : int firstNumber, int secondNumber, int thirdNumber, int slidingNumber
+ output      : int ( the lowest cost to spin all target lock elements )
+ complexity  : O(N); O(3 * 6 * N)
+ */
 int solve( int first, int second, int third, int num ) {
-    register int i;
+    int i;
     int &ret = memoize[first][second][third][num];
     if ( num == N ) return 0;
     if ( ret != -1 ) return ret;
@@ -49,9 +60,9 @@ int solve( int first, int second, int third, int num ) {
     for ( i = -MAX_SPIN_NUM; i <= MAX_SPIN_NUM; i++ ) {
         int afterFirst, afterSecond, afterThird;
         if ( i == 0 ) continue;
-        afterFirst  = calcSpin( afterFirst + i );
-        afterSecond = calcSpin( afterSecond + i );
-        afterThird  = calcSpin( afterThird + i );
+        afterFirst  = calcSpin( first + i );
+        afterSecond = calcSpin( second + i );
+        afterThird  = calcSpin( third + i );
         
         ret = SMIN( ret, solve( afterFirst, second, third, num ) + 1 );
         ret = SMIN( ret, solve( afterFirst, afterSecond, third, num ) + 1 );
@@ -61,31 +72,14 @@ int solve( int first, int second, int third, int num ) {
     return ret;
 }
 
-/*
-    This function calculates the lowest cost for spin target lock to adjust answer lock.
-    input       : int ( expected number to spin )
-    output      : int ( the lowest cost to spin )
-    complexity  : O(1)
-*/
-int calcSpin( int expectedNum ) {
-    return expectedNum < 0 ?
-        ( CIRCULAR_NUM - ( ( -expectedNum ) % CIRCULAR_NUM ) ) % CIRCULAR_NUM
-        : expectedNum % CIRCULAR_NUM;
+int main( void ) {
+    register int i;
+    scanf( "%d", &N );
+    for ( i = 0; i < N; i++ ) scanf( "%d", &target[i] );
+    for ( i = 0; i < N; i++ ) scanf( "%d", &answer[i] );
+    
+    init();
+    printf( "%d\n", solve( 0, 0, 0, 0 ) );
+    
+    return 0;
 }
-
-/*
-    This function initiates the array for memoization.
-    input       : void
-    output      : void
-    complexity  : O(N)
- */
-void init( void ) {
-    register int i, j, k, l;
-    for ( i = 0; i < CIRCULAR_NUM; i++ )
-        for ( j = 0; j < CIRCULAR_NUM; j++ )
-            for ( k = 0; k < CIRCULAR_NUM; k++ )
-                for ( l = 0; l < MAX_NUM + 3; l++ )
-                    memoize[i][j][k][l] = INIT_NUM;
-}
-
-#endif
